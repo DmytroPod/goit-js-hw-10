@@ -46,6 +46,8 @@ function onSelect(e) {
       <p>${breeds[0].description}</p>
       <p><span>Temperament:</span> ${breeds[0].temperament}</p>`);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      refs.error.classList.aremove('is-hidden');
+    });
   refs.catInfo.classList.remove('is-hidden');
 }
