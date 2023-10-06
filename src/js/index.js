@@ -13,11 +13,11 @@ const refs = {
 
 let arrBreeds = [];
 
-refs.breedSelect.addEventListener('change', onSelect);
+const { breedSelect, catInfo, loader, error } = refs;
 
-refs.loader.classList.add('is-hidden');
-refs.error.classList.add('is-hidden');
-refs.catInfo.classList.add('is-hidden');
+loader.classList.add('is-hidden');
+// catInfo.classList.add('is-hidden');
+error.classList.add('is-hidden');
 
 fetchBreeds()
   .then(data => {
@@ -29,25 +29,33 @@ fetchBreeds()
       data: arrBreeds,
     });
   })
-  .catch(err => {
-    console.log(err);
-  });
+  .catch(setError);
+
+refs.breedSelect.addEventListener('change', onSelect);
 
 function onSelect(e) {
+  catInfo.classList.add('is-hidden');
+  breedSelect.classList.add('is-hidden');
+  loader.classList.remove('is-hidden');
   const breedId = e.currentTarget.value;
 
   fetchCatByBreed(breedId)
     .then(resp => {
+      loader.classList.add('is-hidden');
+      catInfo.classList.remove('is-hidden');
       const { url, breeds } = resp[0];
 
-      return (refs.catInfo.innerHTML = `
+      return (catInfo.innerHTML = `
       <img src="${url}" width = "500" alt="${breeds[0].name}">
       <h1>${breeds[0].name}</h1>
       <p>${breeds[0].description}</p>
-      <p><span>Temperament:</span> ${breeds[0].temperament}</p>`);
+      <p><b>Temperament:</b> ${breeds[0].temperament}</p>`);
     })
-    .catch(err => {
-      refs.error.classList.aremove('is-hidden');
-    });
-  refs.catInfo.classList.remove('is-hidden');
+    .catch(setError);
+}
+function setError(error) {
+  catInfo.classList.add('is-hidden');
+  Notiflix.Notify.failure(
+    'Oops! Something went wrong! Try reloading the page or select another cat breed!'
+  );
 }
