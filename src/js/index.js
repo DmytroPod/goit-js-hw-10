@@ -16,7 +16,7 @@ let arrBreeds = [];
 const { breedSelect, catInfo, loader, error } = refs;
 
 loader.classList.add('is-hidden');
-// catInfo.classList.add('is-hidden');
+
 error.classList.add('is-hidden');
 
 fetchBreeds()
